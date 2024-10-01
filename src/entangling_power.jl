@@ -27,17 +27,30 @@ def matA(d, eu, gu):
     return mat
 """
 
+# This function takes obscenely long to compile
+# Not using it for that reason
+# function contract(small_mat, big_mat, ind1, ind2)
+#     index_length = length(size(big_mat))
+#     index_list = -1 * collect(1:index_length)
+#     index_list[ind1] = 1
+#     index_list[ind2] = 2
+#     return ncon((small_mat, big_mat), ([-ind1, -ind2, 1, 2], index_list)) 
+# end
+
 function contract(small_mat, big_mat, ind1, ind2)
     index_length = length(size(big_mat))
     index_list = -1 * collect(1:index_length)
     index_list[ind1] = 1
     index_list[ind2] = 2
-    return ncon((small_mat, big_mat), ([-ind1, -ind2, 1, 2], index_list)) 
+    index_list_destination =  -1 * collect(1:index_length)
+    index_list_small = [-ind1, -ind2, 1, 2]
+    return einsum(EinCode((string.(index_list_small), string.(index_list)), string.(index_list_destination)), (small_mat, big_mat))
+    # return ncon((small_mat, big_mat), ([-ind1, -ind2, 1, 2], index_list)) 
 end
 
 function make_brick_wall_dense_matrix(mat, n_qubits, local_hilbert_space_dimension)
     dimension = local_hilbert_space_dimension^n_qubits
-    final_matrix = Matrix{Float64}(I, (dimension, dimension))
+    final_matrix = Matrix{ComplexF64}(I, (dimension, dimension))
     final_matrix = reshape(final_matrix, tuple((ones(Int, 2*n_qubits) * 2)...))
     @assert n_qubits % 2 == 0
     for ind in 1:2:n_qubits
