@@ -2,6 +2,7 @@ using PyCall
 using TensorOperations
 using LinearAlgebra
 using KrylovKit
+using OMEinsum
 
 #In the case of second moment. The second-moment operators consist of the following matA, 
 #where local random circuits are summation of it and brick-wall circuits are tensor products of it.
@@ -86,16 +87,15 @@ end
 
 import VectorInterface: zerovector, scale, scale!, scale!!, scalartype, add, add!, add!!, inner
 Base.:+(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}) where {T, N} = NSiteVector{T, N}(vec1.tensor + vec2.tensor)
-add(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α=1::Number, β=1::Number) where {T, N} = α * vec1 + β * vec2
-add(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number, β::Number) where {T, N} = α * vec1 + β * vec2 # why is this necessary at all?
-add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α=1::Number, β=1::Number) where {T, N} = add(vec1, vec2, α, β)
-add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number, β::Number) where {T, N} = add(vec1, vec2, α, β) #somehow necessary
-add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number) where {T, N} = add!!(vec1, vec2, α, 1)
+add(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number=1, β::Number=1) where {T, N} = α * vec1 + β * vec2
+# add(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number, β::Number) where {T, N} = α * vec1 + β * vec2 # why is this necessary at all?
+add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number=1, β::Number=1) where {T, N} = add(vec1, vec2, α, β)
+# add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number, β::Number) where {T, N} = add(vec1, vec2, α, β) #somehow necessary
+# add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number) where {T, N} = add!!(vec1, vec2, α, 1)
 
 Base.:*(a :: Number, vec::NSiteVector{T, N}) where {T, N} = NSiteVector{T, N}(a * vec.tensor)
 scale!!(v :: NSiteVector{T, N}, α::Number) where {T, N} = scale(v, α)
 scale(v :: NSiteVector{T, N}, α::Number) where {T, N} = α * v
-
 
 Base.size(vec::NSiteVector) = prod(size(vec.tensor))
 # LinearAlgebra.dot(vec1::NSiteVector, vec2::NSiteVector) = reshape(vec1.tensor, :)' * reshape(vec2.tensor, :)
@@ -135,19 +135,3 @@ function (bw :: BrickWall)(vec::NSiteVector{T, N}) where {T, N}
     final_matrix = contract(bw.mat, final_matrix, n_qubits, 1)
     return final_matrix
 end
-
-# function Base.:*(bw :: BrickWall, vec::NSiteVector{T, N}) where {T, N}
-#     n_qubits = N
-#     final_matrix = vec.tensor
-#     @assert n_qubits % 2 == 0
-#     for ind in 1:2:n_qubits
-#         final_matrix = contract(bw.mat, final_matrix, ind, ind+1)
-#     end
-
-#     for ind in 2:2:n_qubits-2
-#         final_matrix = contract(bw.mat, final_matrix, ind, ind+1)
-#     end
-
-#     final_matrix = contract(bw.mat, final_matrix, n_qubits, 1)
-#     return final_matrix
-# end
