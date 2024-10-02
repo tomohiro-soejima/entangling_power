@@ -3,6 +3,8 @@ using TensorOperations
 using LinearAlgebra
 using KrylovKit
 using OMEinsum
+import VectorInterface: zerovector, scale, scale!, scale!!, scalartype, add, add!, add!!, inner
+
 try
     using MKL
 catch e
@@ -100,14 +102,9 @@ struct NSiteVector{T, N} <: AbstractVector{T}
     tensor :: Array{T, N}
 end
 
-import VectorInterface: zerovector, scale, scale!, scale!!, scalartype, add, add!, add!!, inner
-# Base.:+(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}) where {T, N} = NSiteVector{T, N}(vec1.tensor + vec2.tensor) # promote_rule(T, T) = UnionAll{} for some reason
 Base.:+(vec1::NSiteVector{T, N}, vec2::NSiteVector{S, N}) where {T, S, N} = NSiteVector{promote_type(T, S), N}(vec1.tensor + vec2.tensor)
 add(vec1::NSiteVector, vec2::NSiteVector, α::Number=1, β::Number=1) = β * vec1 + α * vec2
-# add(vec1::NSiteVector, vec2::NSiteVector, α::Number, β::Number) where  = α * vec1 + β * vec2 # why is this necessary at all?
 add!!(vec1::NSiteVector, vec2::NSiteVector, α::Number=1, β::Number=1) = add(vec1, vec2, α, β)
-# add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number, β::Number) where {T, N} = add(vec1, vec2, α, β) #somehow necessary
-# add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number) where {T, N} = add!!(vec1, vec2, α, 1)
 
 Base.:*(a :: T, vec::NSiteVector{S, N}) where {T<:Number, S, N} = NSiteVector{promote_type(T, S), N}(a * vec.tensor)
 scale!!(v :: NSiteVector{T, N}, α::Number) where {T, N} = scale(v, α)
