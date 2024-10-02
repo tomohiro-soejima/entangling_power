@@ -1,0 +1,12 @@
+name = "EntanglingPower"
+uuid = "00377202-c42f-4951-acd1-049591ada9fb"
+authors = ["Tomohiro <tomohiro_soejima@g.harvard.edu>"]
+version = "0.1.0"
+
+[deps]
+KrylovKit = "0b1a1467-8014-51b9-945f-bf0ae24f4b77"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+OMEinsum = "ebe7aa44-baf0-506c-a96f-8464559b3922"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+TensorOperations = "6aa20fa7-93e2-5fca-9bc0-fbd0db3c71a2"
+VectorInterface = "409d34a3-91d5-4945-b6ec-7529ddf182d8"

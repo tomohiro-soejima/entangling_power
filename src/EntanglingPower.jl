@@ -1,3 +1,6 @@
+
+module EntanglingPower
+
 using PyCall
 using TensorOperations
 using LinearAlgebra
@@ -138,3 +141,5 @@ function diagonalize_brick_wall_arnoldi_matrix_free(n_qubits, local_hilbert_spac
 end
 
 include("local_circuit.jl")
+
+end #module end
