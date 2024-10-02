@@ -1,11 +1,14 @@
 using NPZ
 
-function run_brick_wall_scan(n_qubit, res)
+function run_brick_wall_scan(n_qubit, res, verbosity=0)
     eu_list = range(1/2, 2/3, res)
     gu_list = range(0.25, 0.75, res)
     iter = Iterators.product(eu_list, gu_list)
 
     res_list = map(iter) do item
+        if verbosity > 0
+            println(item)
+        end
         eu, gu = item
         res=diagonalize_brick_wall_arnoldi_matrix_free(n_qubit, 2, eu, gu)
         res[1]
