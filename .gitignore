@@ -27,3 +27,5 @@ Manifest.toml
 
 ##### Added by tomo
 *.ipynb
+*.npy
+*.DS_Store
