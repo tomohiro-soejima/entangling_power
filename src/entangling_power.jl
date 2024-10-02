@@ -3,6 +3,13 @@ using TensorOperations
 using LinearAlgebra
 using KrylovKit
 using OMEinsum
+try
+    using MKL
+catch e
+    println(e)
+end
+
+
 
 #In the case of second moment. The second-moment operators consist of the following matA, 
 #where local random circuits are summation of it and brick-wall circuits are tensor products of it.
