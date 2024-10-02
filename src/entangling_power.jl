@@ -149,7 +149,7 @@ end
 function diagonalize_brick_wall_arnoldi_matrix_free(n_qubits, local_hilbert_space_dimension, eu, gu)
     d = local_hilbert_space_dimension
     matA = reshape(py"matA"(d, eu, gu), (d, d, d, d))
-    T = eltype(matA) # for some reason, the code only works for complex numbers. Maybe we get complex eigenvalues during orthogonalization?
+    T = eltype(matA)
     vec1 = NSiteVector{T, n_qubits}(rand(T, ((d*ones(Int, n_qubits))...)))
     bw = BrickWall{T}(matA);
 
