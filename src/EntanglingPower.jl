@@ -15,6 +15,10 @@ catch e
 end
 
 
+export diagonalize_brick_wall, diagonalize_brick_wall_arnoldi, diagonalize_brick_wall_arnoldi_matrix_free
+export diagonalize_local_circuit, diagonalize_local_circuit_arnoldi
+export run_brick_wall_scan
+
 include("define_matrix.jl")
 
 
@@ -59,7 +63,7 @@ end
 
 
 function diagonalize_brick_wall(n_qubits, local_hilbert_space_dimension, eu, gu)
-    mat = (py"matA"(local_hilbert_space_dimension, eu, gu))
+    mat = (matA(local_hilbert_space_dimension, eu, gu))
     mat_reshaped = reshape(mat, (2, 2, 2, 2))
 
     mat_big = make_brick_wall_dense_matrix(mat_reshaped, n_qubits, local_hilbert_space_dimension)
@@ -67,7 +71,7 @@ function diagonalize_brick_wall(n_qubits, local_hilbert_space_dimension, eu, gu)
 end
 
 function diagonalize_brick_wall_arnoldi(n_qubits, local_hilbert_space_dimension, eu, gu)
-    mat = (py"matA"(local_hilbert_space_dimension, eu, gu))
+    mat = (matA(local_hilbert_space_dimension, eu, gu))
     mat_reshaped = reshape(mat, (2, 2, 2, 2))
 
     mat_big = reshape(make_brick_wall_dense_matrix(mat_reshaped, n_qubits, local_hilbert_space_dimension), (2^n_qubits, 2^n_qubits))
@@ -132,7 +136,7 @@ end
 
 function diagonalize_brick_wall_arnoldi_matrix_free(n_qubits, local_hilbert_space_dimension, eu, gu)
     d = local_hilbert_space_dimension
-    matA = reshape(py"matA"(d, eu, gu), (d, d, d, d))
+    matA = reshape(matA(d, eu, gu), (d, d, d, d))
     T = eltype(matA)
     vec1 = NSiteVector{T, n_qubits}(rand(T, ((d*ones(Int, n_qubits))...)))
     bw = BrickWall{T}(matA);
