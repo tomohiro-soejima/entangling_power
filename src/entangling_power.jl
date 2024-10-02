@@ -87,7 +87,7 @@ end
 
 import VectorInterface: zerovector, scale, scale!, scale!!, scalartype, add, add!, add!!, inner
 Base.:+(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}) where {T, N} = NSiteVector{T, N}(vec1.tensor + vec2.tensor)
-add(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number=1, β::Number=1) where {T, N} = α * vec1 + β * vec2
+add(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number=1, β::Number=1) where {T, N} = β * vec1 + α * vec2
 # add(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number, β::Number) where {T, N} = α * vec1 + β * vec2 # why is this necessary at all?
 add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number=1, β::Number=1) where {T, N} = add(vec1, vec2, α, β)
 # add!!(vec1::NSiteVector{T, N}, vec2::NSiteVector{T, N}, α::Number, β::Number) where {T, N} = add(vec1, vec2, α, β) #somehow necessary
