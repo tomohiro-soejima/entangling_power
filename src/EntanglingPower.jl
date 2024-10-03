@@ -146,4 +146,6 @@ end
 
 include("local_circuit.jl")
 
+include("scripting.jl")
+
 end #module end
