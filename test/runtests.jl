@@ -28,6 +28,17 @@ end
         vals_sorted = sort(abs.(vals), rev=true)
         second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals_sorted)))
         @test isapprox(second_largest_eigval, 0.758714, atol=1e-3)
+
+        
+        vals = EntanglingPower.diagonalize_local_circuit_arnoldi(4, 2, 2/3, 5/9)[1]
+        vals_sorted = sort(abs.(vals), rev=true)
+        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals_sorted)))
+        @test isapprox(second_largest_eigval, 0.758714, atol=1e-3)
+
+        vals = EntanglingPower.diagonalize_local_circuit_arnoldi_matrix_free(4, 2, 2/3, 5/9)[1]
+        vals_sorted = sort(abs.(vals), rev=true)
+        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals_sorted)))
+        @test isapprox(second_largest_eigval, 0.758714, atol=1e-3)
     end
 
     @testset "brick wall circuit" begin

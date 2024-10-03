@@ -28,3 +28,33 @@ function diagonalize_local_circuit_arnoldi(n_qubits, local_hilbert_space_dimensi
     mat_big = reshape(make_local_circuit_dense_matrix(mat_reshaped, n_qubits, local_hilbert_space_dimension), (2^n_qubits, 2^n_qubits))
     return eigsolve(mat_big, 4)
 end
+
+################################################################
+############ Custom local type #################################
+################################################################
+
+struct LocalCircuit{T}
+    mat :: Array{T, 4}
+end
+
+function (lc :: LocalCircuit)(vec::NSiteVector{T, N}) where {T, N}
+    n_qubits = N
+    final_matrix = zerovector(vec)
+    @assert n_qubits % 2 == 0
+    for ind in 1:(n_qubits-1)
+        final_matrix += contract(lc.mat, vec, ind, ind+1)
+    end
+
+    final_matrix += contract(lc.mat, vec, n_qubits, 1)
+    return  (1 / n_qubits) * final_matrix
+end
+
+function diagonalize_local_circuit_arnoldi_matrix_free(n_qubits, local_hilbert_space_dimension, eu, gu)
+    d = local_hilbert_space_dimension
+    mat = reshape(matA(d, eu, gu), (d, d, d, d))
+    T = eltype(mat)
+    lc = LocalCircuit{T}(mat)
+    vec1 = NSiteVector{T, n_qubits}(rand(T, ((d*ones(Int, n_qubits))...)))
+    
+    return eigsolve(lc, vec1, 4)
+end
