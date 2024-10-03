@@ -6,7 +6,7 @@ function run_brick_wall_scan(n_qubit, resolution, local_hilbert_space_dimension=
         gu_list = range(0.25, 0.75, resolution)
     elseif local_hilbert_space_dimension == 3
         eu_list = range(0.7, 1, resolution)
-        gu_list = range(0.35, 0.65, resolutions)
+        gu_list = range(0.35, 0.65, resolution)
     end
     iter = Iterators.product(eu_list, gu_list)
 
@@ -36,7 +36,7 @@ function run_local_circuit_scan(n_qubit, resolution, local_hilbert_space_dimensi
         gu_list = range(0.25, 0.75, resolution)
     elseif local_hilbert_space_dimension == 3
         eu_list = range(0.7, 1, resolution)
-        gu_list = range(0.35, 0.65, resolutions)
+        gu_list = range(0.35, 0.65, resolution)
     end
     iter = Iterators.product(eu_list, gu_list)
 
