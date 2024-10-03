@@ -25,8 +25,8 @@ function run_brick_wall_scan(n_qubit, res, local_hilbert_space_dimension=2, verb
 
     if save
         npzwrite("eigvals_n=$(n_qubit)_res_$(res)_d_$(local_hilbert_space_dimension).npy", second_largest_eigenvalue)
-        npzwrite("eulist_n=$(n_qubit)_res_$(res)_$(local_hilbert_space_dimension).npy", eu_list)
-        npzwrite("gulist_n=$(n_qubit)_res_$(res)_$(local_hilbert_space_dimension).npy", gu_list)
+        npzwrite("eulist_n=$(n_qubit)_res_$(res)_$(local_hilbert_space_dimension).npy", collect(eu_list))
+        npzwrite("gulist_n=$(n_qubit)_res_$(res)_$(local_hilbert_space_dimension).npy", collect(gu_list))
     end
 end
 
