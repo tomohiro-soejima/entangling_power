@@ -25,20 +25,25 @@ end
 @testset "finding_eigenvalues" begin
     @testset "local circuit" begin
         vals = EntanglingPower.diagonalize_local_circuit(4, 2, 2/3, 5/9)[1].values
-        @test isapprox(abs(first(filter(x->abs(x-1)>1e-8, vals))), 0.758714, atol=1e-3)
+        vals_sorted = sort(abs.(vals), rev=true)
+        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals_sorted)))
+        @test isapprox(second_largest_eigval, 0.758714, atol=1e-3)
     end
 
     @testset "brick wall circuit" begin
-        vals=diagonalize_brick_wall(4, 2, 2/3, 5/9)[1].values
-        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals)))
+        vals=(diagonalize_brick_wall(4, 2, 2/3, 5/9)[1].values)
+        vals_sorted = sort(abs.(vals), rev=true)
+        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals_sorted)))
         @test isapprox(abs(second_largest_eigval), 0.0605844, atol=1e-5)
 
         vals=diagonalize_brick_wall_arnoldi(4, 2, 2/3, 5/9)[1]
-        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals)))
+        vals_sorted = sort(abs.(vals), rev=true)
+        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals_sorted)))
         @test isapprox(abs(second_largest_eigval), 0.0605844, atol=1e-5)
         
         vals=diagonalize_brick_wall_arnoldi_matrix_free(4, 2, 2/3, 5/9)[1]
-        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals)))
+        vals_sorted = sort(abs.(vals), rev=true)
+        second_largest_eigval = (first(filter(x->abs(x-1)>1e-8, vals_sorted)))
         @test isapprox(abs(second_largest_eigval), 0.0605844, atol=1e-5)
     end
 
