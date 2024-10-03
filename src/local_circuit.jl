@@ -5,12 +5,12 @@ function make_local_circuit_dense_matrix(mat, n_qubits, local_hilbert_space_dime
     identity_reshaped = reshape(identity, tuple((ones(Int, 2*n_qubits) * 2)...))
     final_matrix = zeros(T, tuple((ones(Int, 2*n_qubits) * 2)...))
     @assert n_qubits % 2 == 0
-    for ind in 1:n_qubits
+    for ind in 1:n_qubits-1
         final_matrix += contract(mat, identity_reshaped, ind, ind+1)
     end
 
     final_matrix += contract(mat, identity_reshaped, n_qubits, 1)
-    return final_matrix
+    return final_matrix / n_qubits
 end
 
 function diagonalize_local_circuit(n_qubits, local_hilbert_space_dimension, eu, gu)

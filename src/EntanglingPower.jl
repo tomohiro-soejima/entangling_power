@@ -136,10 +136,10 @@ end
 
 function diagonalize_brick_wall_arnoldi_matrix_free(n_qubits, local_hilbert_space_dimension, eu, gu)
     d = local_hilbert_space_dimension
-    matA = reshape(matA(d, eu, gu), (d, d, d, d))
-    T = eltype(matA)
+    mat = reshape(matA(d, eu, gu), (d, d, d, d))
+    T = eltype(mat)
     vec1 = NSiteVector{T, n_qubits}(rand(T, ((d*ones(Int, n_qubits))...)))
-    bw = BrickWall{T}(matA);
+    bw = BrickWall{T}(mat);
 
     return eigsolve(bw, vec1, 4)
 end
