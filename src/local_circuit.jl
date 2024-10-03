@@ -51,10 +51,10 @@ end
 
 function diagonalize_local_circuit_arnoldi_matrix_free(n_qubits, local_hilbert_space_dimension, eu, gu)
     d = local_hilbert_space_dimension
-    mat = reshape(matA(d, eu, gu), (d, d, d, d))
+    mat = reshape(matA(d, eu, gu), (2, 2, 2, 2))
     T = eltype(mat)
     lc = LocalCircuit{T}(mat)
-    vec1 = NSiteVector{T, n_qubits}(rand(T, ((d*ones(Int, n_qubits))...)))
+    vec1 = NSiteVector{T, n_qubits}(rand(T, ((2*ones(Int, n_qubits))...)))
     
     return eigsolve(lc, vec1, 4)
 end
