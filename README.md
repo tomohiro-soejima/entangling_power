@@ -1,1 +1,9 @@
 # entangling_power
+
+# Estimated runtime
+
+It is important to provide an estimate of the runtime. As an easy comparison, let us first look at the problem of populating the entries of `Varray`. The number of entries one needs to fill is given by $N_k^3 N_b^4$. Using $N_k=6^2 = 36$ and $N_b=4$, this results in the estimate $1.0 \times 10^7$. Assuming each entry takes 100 ns to finish, this results in a runtime of 1 s, a reasonable estimate for the actual runtime.
+
+(Note: Python for loop is slow, so why is this relatively fast for loop achieved? This is presumably because the actual looping is done only over $N_k^3$. So each iteration takes 100 ns $\times 4^4 =$ 25 $\mu$s. This should be achievable even with python's relatively slow loop.)
+
+Let's now instead estimate the runtime of SW transformation. This amounts to counting the number of basis states you could be connected to. It turns out that the main contribution will come from the diagonal part of Schrieffer-Wolff, simply because there are more terms that can contribute. Given a state $\ket{k, q}$, there are $N_k^3 (N_b/2)^4$ intermediate states you can pass through. For a fixed momentum sector, we have $N_k (N_b/2)^2$ initial state. Here, the factor of 1/2 comes from considering filled/empty bands only for creation/annihilation operators. The combined complexity is therefore $2^{-6} N_k^4 N_b^6$. Using $N_k = 36, N_b=4$ again, we get the number of steps to be  $1.0 * 10^8$. Again, assuming each iteration takes about 100 ns to finish, we get an estimtaed runtime of 10 s. My current runtime is 90 s, so there's some room for improvement, but not by a wide margin.
